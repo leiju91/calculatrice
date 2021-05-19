@@ -11,7 +11,9 @@ const spanLevel = getElement(".selectedLevel");
 
 const data = {
     num1 : 1,
-    num2 : 2
+    num2 : 2,
+    operator: '+',
+    level: 1
 };
 
 
@@ -20,15 +22,27 @@ function getElement(selector) {
 }
 
 // event click sur le bloc qui a la class operator pour recup les values
-operatorEl.addEventListener("click", ({target: {value, tagName}}) => {
+operatorEl.addEventListener("click",({ target }) => {
 
-    if (tagName !== "BUTTON") {
+    if (target.tagName !== "BUTTON") {        
         return;
+    }
+ 
+    // Select ts les btn qui on la classe btn-small et active
+    const activeButton = operatorEl.querySelector('.small-btn.active');
+    console.log(activeButton); //null
+
+    // S'il y a un bouton avec .active, alors on la retire
+    activeButton ? activeButton.classList.remove("active") : '';
+
+    // Ajoute la classe .active au bouton sur lequel on a cliqué
+    if (target.matches('button.small-btn')) {
+        target.classList.add("active");
     }
 
     // on rajoute une clé valeur à l'obj data
-    data.operator = value;   
-    spanOperator.innerHTML = value; 
+    data.operator = target.value;   
+    getRandomNumbersByLevel();
 });
 
 levelEl.addEventListener("click", ({target: {value, tagName}}) => {
@@ -36,14 +50,20 @@ levelEl.addEventListener("click", ({target: {value, tagName}}) => {
     if (tagName !== "BUTTON") {
         return;
     }
-    
-    spanLevel.innerHTML = value;
-    
+        
     data.level = value;
+    getRandomNumbersByLevel();
+    
+});
+
+function getRandomNumbersByLevel() {
     data.num1 = getNumberByLevel(data.level);    
     data.num2 = getNumberByLevel(data.level);
+    spanOperator.innerHTML = data.operator;
+    spanLevel.innerHTML = data.level;
+    
     displayStatement();
-});
+}
 
 const levels = {
     0:0,
@@ -101,10 +121,13 @@ quizzFormEl.addEventListener("submit", (event) => {
     const result = operation(data.num1, data.num2);
     const isRight = answer === result;
 
-    const feedback = isRight ? "So cool !!!!" : "Too bad... :(";
+    const feedback = isRight ? "So cool :)" : "Too bad... try again :(";
     resultEl.innerHTML = feedback;
     
     resultEl.classList.toggle('success', isRight);
     resultEl.classList.toggle('error', !isRight);
     
 })
+
+getRandomNumbersByLevel();
+

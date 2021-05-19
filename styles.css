@@ -114,6 +114,19 @@ input#answer {
     color: #ED4C67;
 }
 
+.selectedOperator,
+.selectedLevel {
+    
+    padding: 0 1rem 0 1rem;
+    background-color: rebeccapurple;
+    color: white;
+    border-radius: 1rem;
+}
+
+.active {
+    background-color:rebeccapurple;
+    border: 3px solid black;
+}
 
 @media only screen and (max-width: 910px) {
     #app {
