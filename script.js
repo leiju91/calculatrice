@@ -7,6 +7,14 @@ const quizzFormEl = getElement(".quiz-form");
 const answerEl = getElement("#answer");
 const spanOperator = getElement(".selectedOperator");
 const spanLevel = getElement(".selectedLevel");
+const goodAnswersEl = getElement("#goodAnswers");
+const questionsEl = getElement("#questions");
+const maxQuestions = 10;
+
+const score = {
+    goodAnswers : 0,
+    questions : 0
+};
 
 
 const data = {
@@ -28,11 +36,11 @@ operatorEl.addEventListener("click",({ target }) => {
         return;
     }
  
-    // Select ts les btn qui on la classe btn-small et active
+    // Select ts les btn qui on la classe small-btn et active
     const activeButton = operatorEl.querySelector('.small-btn.active');
     console.log(activeButton); //null
 
-    // S'il y a un bouton avec .active, alors on la retire
+    // S'il y a un boutton avec .active, alors on la retire
     activeButton ? activeButton.classList.remove("active") : '';
 
     // Ajoute la classe .active au bouton sur lequel on a cliqué
@@ -100,11 +108,9 @@ const operations = {
     '-': (a, b) => a - b,
 }
 
-Object.keys(operations)
-
 function getOperation(operator) {
     const defaultFn = () => NaN
-    const validOperators = Object.keys(operations)
+    const validOperators = Object.keys(operations);
 
     if (!validOperators.includes(operator)) {
         return defaultFn
@@ -116,8 +122,10 @@ quizzFormEl.addEventListener("submit", (event) => {
 
     event.preventDefault();
     const answer = Number(answerEl.value);
+    answerEl.value = "";
 
     const operation = getOperation(data.operator);
+    console.log(operation);
     const result = operation(data.num1, data.num2);
     const isRight = answer === result;
 
@@ -126,7 +134,11 @@ quizzFormEl.addEventListener("submit", (event) => {
     
     resultEl.classList.toggle('success', isRight);
     resultEl.classList.toggle('error', !isRight);
-    
+
+    questionsEl.innerHTML = ++score.questions;
+    if (isRight) {
+        goodAnswersEl.innerHTML = ++score.goodAnswers;
+    }
 })
 
 getRandomNumbersByLevel();
