@@ -9,6 +9,9 @@ const spanOperator = getElement(".selectedOperator");
 const spanLevel = getElement(".selectedLevel");
 const goodAnswersEl = getElement("#goodAnswers");
 const questionsEl = getElement("#questions");
+
+
+const minAnswers = 0;
 const maxQuestions = 10;
 
 const score = {
@@ -24,7 +27,11 @@ const data = {
     level: 1
 };
 
+// envoie le question max ds le html
+goodAnswersEl.innerHTML = minAnswers
+questionsEl.innerHTML = maxQuestions
 
+// fct qui genere 'document.querySelector'
 function getElement(selector) {
     return document.querySelector(selector);
 }
